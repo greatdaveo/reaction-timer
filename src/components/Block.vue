@@ -1,29 +1,48 @@
 <template>
-  <div class="block" v-if="showBlock">Click Me</div>
+  <div class="block" v-if="showBlock" @click="stopTimer">Click Me</div>
 </template>
 
 <script>
 import { onUnmounted } from "vue";
 export default {
   props: ["delay"],
+
   data() {
     return {
       showBlock: false,
+      timer: null,
+      reactionTime: 0,
     };
   },
+
   mounted() {
     console.log("Component mounted");
     setTimeout(() => {
       this.showBlock = true;
+      this.startTimer();
       console.log(this.delay);
     }, this.delay);
   },
+
+  methods: {
+    startTimer() {
+      this.timer = setInterval(() => {
+        this.reactionTime += 10;
+      }, 10);
+    },
+    stopTimer() {
+      clearInterval(this.timer);
+      this.$emit("end", this.reactionTime);
+    },
+  },
+
   updated() {
     console.log("Component updated");
-  }, 
+  },
+
   unmounted() {
     console.log("Component unMounted");
-  }, 
+  },
 };
 </script>
 
